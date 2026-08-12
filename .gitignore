@@ -1,0 +1,7 @@
+/node_modules
+AGENT.md
+AGENTS.md
+package-lock.json
+.DS_Store
+/panic/node_modules
+/panic/package-lock.json
