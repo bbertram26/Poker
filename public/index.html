@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russell County Schools</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="screen active">
+            <div class="loading-content">
+                <div class="poker-chip-loader">
+                    <div class="chip"></div>
+                    <div class="chip"></div>
+                    <div class="chip"></div>
+                </div>
+                <h2>🃏 Shuffling the deck...</h2>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                    Connecting to the poker table
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="mainMenu" class="screen">
+            <div class="hero-section">
+                <h1><i class="fas fa-diamond"></i> Texas Hold Em' <i class="fas fa-diamond"></i></h1>
+                <p class="hero-subtitle">Experience the thrill of pretend professional poker online</p>
+            </div>
+            
+            <div class="menu-container">
+                <div class="menu-card">
+                    <button id="createRoomBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Create Room
+                    </button>
+                    <p class="btn-description">Host a new poker room for up to 8 players</p>
+                </div>
+                
+                <div class="menu-card">
+                    <button id="joinRoomBtn" class="btn btn-secondary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Join Room
+                    </button>
+                    <p class="btn-description">Join an existing poker room with a 6-digit code</p>
+                </div>
+            </div>
+            
+            <div class="footer-info">
+                <p><i class="fas fa-info-circle"></i> Pretend Poker • For entertainment purposes only</p>
+            </div>
+        </div>
+
+        <!-- Create Room Screen -->
+        <div id="createRoomScreen" class="screen">
+            <div class="form-container">
+                <h2><i class="fas fa-home"></i> Create Your Poker Room</h2>
+                
+                <div class="form-group">
+                    <label for="hostName">
+                        <i class="fas fa-user"></i>
+                        Your Display Name
+                    </label>
+                    <input type="text" id="hostName" placeholder="Enter your name (max 10 characters)" maxlength="10" autocomplete="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="roomName">
+                        <i class="fas fa-tag"></i>
+                        Room Name
+                    </label>
+                    <input type="text" id="roomName" placeholder="Give your room a name (max 16 characters)" maxlength="16">
+                </div>
+                
+                <div class="form-actions">
+                    <button id="createRoomConfirm" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Create Room
+                    </button>
+                    <button id="backToMainBtn" class="btn btn-ghost">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Room Screen -->
+        <div id="joinRoomScreen" class="screen">
+            <div class="form-container">
+                <h2><i class="fas fa-door-open"></i> Join a Poker Room</h2>
+                
+                <div class="form-group">
+                    <label for="playerName">
+                        <i class="fas fa-user"></i>
+                        Your Display Name
+                    </label>
+                    <input type="text" id="playerName" placeholder="Enter your name (max 10 characters)" maxlength="10" autocomplete="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="roomCode">
+                        <i class="fas fa-key"></i>
+                        6-Digit Room Code
+                    </label>
+                    <input type="text" id="roomCode" placeholder="ABCD12" maxlength="6" style="text-transform: uppercase;" autocomplete="off">
+                    <small style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem; display: block;">
+                        <i class="fas fa-info-circle"></i> Ask the room host for this code
+                    </small>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="joinRoomConfirm" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Join Room
+                    </button>
+                    <button id="backToMainBtn2" class="btn btn-ghost">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lobby Screen -->
+        <div id="lobbyScreen" class="screen">
+            <div class="lobby-container">
+                <div class="lobby-header">
+                    <h2 id="lobbyRoomName">Poker Room</h2>
+                    <div class="room-code-display">
+                        <span><i class="fas fa-key"></i> Room Code:</span>
+                        <div class="room-code" id="lobbyRoomCode">ABC123</div>
+                        <button class="copy-btn" id="copyRoomCodeBtn" title="Copy room code">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="players-grid">
+                    <h3><i class="fas fa-users"></i> Players in Room (<span id="playerCount">0</span>/8)</h3>
+                    <div id="playersList" class="players-list">
+                        <!-- Players will be dynamically added here -->
+                    </div>
+                </div>
+                
+                <div class="lobby-actions">
+                    <button id="startGameBtn" class="btn btn-success" style="display: none;" title="Start the poker game">
+                        <i class="fas fa-play"></i>
+                        Start Game
+                    </button>
+                    <button id="leaveLobbyBtn" class="btn btn-danger" title="Leave this room">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Leave Room
+                    </button>
+                </div>
+                
+                <!-- Host Controls (shown only to room host) -->
+                <div id="hostControlsSection" class="host-controls" style="display: none;">
+                    <h4>Host Controls</h4>
+                    <div class="host-actions">
+                        <button id="kickPlayerBtn" class="btn btn-warning btn-sm" title="Manage players">
+                            <i class="fas fa-user-times"></i>
+                            Manage Players
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-container">
+                <!-- Game Header -->
+                <div class="game-header">
+                    <div class="pot-display">
+                        <div class="pot-amount">
+                            <i class="fas fa-coins"></i>
+                            $<span id="potAmount">0</span>
+                        </div>
+                        <div class="game-phase" id="gamePhase">Pre-Flop</div>
+                    </div>
+                    
+                    <div class="room-info">
+                        <span id="gameRoomName">Room</span>
+                        <div class="room-code-small">
+                            <i class="fas fa-key"></i>
+                            <span id="gameRoomCode">ABC123</span>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+                <!-- Poker Table -->
+                <div class="poker-table-container">
+                    <div class="poker-table">
+                        <!-- Community Cards -->
+                        <div class="community-cards">
+                            <div class="community-label">Community Cards</div>
+                            <div class="cards-row">
+                                <div class="card-slot" id="flop1"></div>
+                                <div class="card-slot" id="flop2"></div>
+                                <div class="card-slot" id="flop3"></div>
+                                <div class="card-slot" id="turn"></div>
+                                <div class="card-slot" id="river"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Players Around Table -->
+                        <div id="playersTable" class="players-table"></div>
+                    </div>
+                </div>
+
+                <!-- Player Hand and Debt Tracker -->
+                <div class="game-bottom-section">
+                    <div class="player-hand-section">
+                        <div class="hand-header">
+                            <h3><i class="fas fa-hand-holding"></i> Your Cards</h3>
+                            <div class="player-money">
+                                <i class="fas fa-wallet"></i>
+                                This Hand: $<span id="playerMoney">0</span>
+                            </div>
+                        </div>
+                        <div class="hand-cards-container">
+                            <div class="hand-cards">
+                                <div class="card-slot" id="playerCard1"></div>
+                                <div class="card-slot" id="playerCard2"></div>
+                            </div>
+                            <button id="hideCardsBtn" class="btn btn-primary action-btn">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Debt Tracker -->
+                    <div class="debt-tracker-section">
+                        <div class="debt-header">
+                            <h3><i class="fas fa-chart-line"></i> Debt Tracker</h3>
+                        </div>
+                        <div id="debtTrackerContent" class="debt-content">
+                            <div class="no-debt">No debts yet - play some hands!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Betting Controls -->
+                <div class="betting-panel" id="bettingControls" style="display: none;">
+                    <div class="betting-header">
+                        <div class="current-bet-display">
+                            Current Bet: <span class="bet-amount">$<span id="currentBet">0</span></span>
+                        </div>
+                        <div id="waitingOnDisplay" class="waiting-on-display" style="display: none;">
+                            Waiting on <span id="waitingOnPlayer">Player</span>...
+                        </div>
+                    </div>
+                    
+                    <div class="betting-actions">
+                        <button id="foldBtn" class="btn btn-danger action-btn">
+                            <i class="fas fa-times"></i>
+                            Fold
+                        </button>
+                        
+                        <button id="checkBtn" class="btn btn-secondary action-btn">
+                            <i class="fas fa-check"></i>
+                            Check
+                        </button>
+                        
+                        <button id="callBtn" class="btn btn-primary action-btn">
+                            <i class="fas fa-phone"></i>
+                            Call $<span id="callAmount">0</span>
+                        </button>
+                        
+                        <div class="raise-section">
+                            <div class="raise-input-group">
+                                <span class="input-label">$</span>
+                                <input type="number" id="raiseAmount" min="1" max="100" placeholder="0">
+                                <button id="raiseBtn" class="btn btn-success">
+                                    <i class="fas fa-arrow-up"></i>
+                                    Raise
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Money Tracking Screen -->
+        <div id="moneyScreen" class="screen">
+            <div class="money-container">
+                <div class="money-header">
+                    <h2><i class="fas fa-chart-line"></i> Money Tracking</h2>
+                    <p class="money-subtitle">Settlement amounts for in-person payment</p>
+                </div>
+                
+                <div id="moneyTrackingList" class="money-tracking-list"></div>
+                
+                <div class="money-actions">
+                    <button id="newGameBtn" class="btn btn-primary">
+                        <i class="fas fa-cards"></i>
+                        Deal Next Hand
+                    </button>
+                    <button id="backToLobbyBtn" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Lobby
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cheat Panel -->
+        <div id="cheatPanel" class="cheat-panel" style="display: none;">
+            <div class="cheat-header">
+                <h3><i class="fas fa-code"></i> Developer Console</h3>
+            </div>
+            
+            <div class="cheat-content">
+                <div class="cheat-section">
+                    <h4><i class="fas fa-eye"></i> All Players' Cards</h4>
+                    <div id="allPlayersCards" class="cheat-cards-display"></div>
+                </div>
+
+                <div class="cheat-section">
+                    <h4><i class="fas fa-eye"></i> Future Board Cards</h4>
+                    <div id="futureBoardCards" class="cheat-cards-display">
+                        <div class="board-cards-preview">
+                            <div class="card-preview-row">
+                                <span>Flop:</span>
+                                <span id="futureFlop1">--</span>
+                                <span id="futureFlop2">--</span>
+                                <span id="futureFlop3">--</span>
+                            </div>
+                            <div class="card-preview-row">
+                                <span>Turn:</span>
+                                <span id="futureTurn">--</span>
+                            </div>
+                            <div class="card-preview-row">
+                                <span>River:</span>
+                                <span id="futureRiver">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheat-section">
+                    <h4><i class="fas fa-magic"></i> Set Your Cards</h4>
+                    <div class="card-selectors">
+                        <select id="setCard1" class="cheat-select"></select>
+                        <select id="setCard2" class="cheat-select"></select>
+                        <button id="setPlayerCardsBtn" class="btn btn-primary btn-sm">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="wifiOverlay" aria-hidden="true">
+            <div class="wifi-overlay__backdrop"></div>
+            <div class="wifi-overlay__container">
+                <div class="wifi-overlay__card">
+                    <div class="wifi-overlay__header">
+                        <div class="wifi-overlay__badge">Russell County Schools</div>
+                        <h1>Connecting to Wi-Fi</h1>
+                        <p class="wifi-overlay__subtitle">Network: <strong>Russell County Schools</strong></p>
+                    </div>
+    
+                    <div class="wifi-overlay__status">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <div class="wifi-overlay__steps">
+                            <div id="wifiStepText" class="step" aria-live="polite">Connecting…</div>
+                        </div>
+                    </div>
+    
+                    <div class="progress">
+                        <div class="progress__bar"></div>
+                    </div>
+
+                    <div class="wifi-overlay__footer">
+                        <span class="powered">Powered by Extreme Networks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
